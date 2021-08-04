@@ -1,16 +1,25 @@
+import torch
+import torch.nn as nn
+
+from src.segmentation.model_components.DoubleConv import DoubleConv
+from src.segmentation.model_components.OutConv import OutConv
+from src.segmentation.model_components.InConv import InConv
+from src.segmentation.model_components.Down import Down
+from src.segmentation.model_components.Up import Up
+
 class UNet(nn.Module):
     def __init__(self, n_channels, n_classes):
         super(UNet, self).__init__()
-        self.inc = inconv(n_channels, 64)
-        self.down1 = down(64, 128)
-        self.down2 = down(128, 256)
-        self.down3 = down(256, 512)
-        self.down4 = down(512, 512)
-        self.up1 = up(1024, 256, False)
-        self.up2 = up(512, 128, False)
-        self.up3 = up(256, 64, False)
-        self.up4 = up(128, 64, False)
-        self.outc = outconv(64, n_classes)
+        self.inc = InConv(n_channels, 64)
+        self.down1 = Down(64, 128)
+        self.down2 = Down(128, 256)
+        self.down3 = Down(256, 512)
+        self.down4 = Down(512, 512)
+        self.up1 = Up(1024, 256, False)
+        self.up2 = Up(512, 128, False)
+        self.up3 = Up(256, 64, False)
+        self.up4 = Up(128, 64, False)
+        self.outc = OutConv(64, n_classes)
 
     def forward(self, x):
         x1 = self.inc(x)
