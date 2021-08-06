@@ -10,10 +10,10 @@ class Up(nn.Module):
 
         if bilinear:
             self.Up = nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True)
+            self.conv = DoubleConv(in_ch, out_ch, in_ch // 2)
         else:
-            self.Up = nn.ConvTranspose2d(in_ch // 2, in_ch // 2, 2, stride=2)
-
-        self.conv = DoubleConv(in_ch, out_ch)
+            self.Up = nn.ConvTranspose2d(in_ch, in_ch // 2, kernel_size = 2, stride=2)
+            self.conv = DoubleConv(in_ch, out_ch)
 
     def forward(self, x1, x2):
         x1 = self.Up(x1)

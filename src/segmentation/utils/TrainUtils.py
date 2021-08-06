@@ -6,7 +6,7 @@ class TrainUtils:
 	def __init__(self):
 		self.smooth = 0.6
 
-	def dice_no_threshold(self, outputs: torch.Tensor, targets: torch.Tensor, eps: float = 1e-7, threshold: float = None, activation: str = "Sigmoid"):
+	def dice_no_threshold(self, outputs: torch.Tensor, targets: torch.Tensor, eps: float = 1e-7, threshold: float = 0.3, activation: str = "Sigmoid"):
 
 		#activation_fn = get_activation_fn(activation)
 		#outputs = activation_fn(outputs)

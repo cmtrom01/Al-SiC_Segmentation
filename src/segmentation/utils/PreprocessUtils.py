@@ -27,11 +27,14 @@ class PreprocessUtils:
 		bg_inds3 = np.where(np.all(img_arr == c6, axis=2))
 
 		new_image_1[c_inds] = 1
-		new_image_2[r_inds] = 1
+		new_image_2[r_inds] = 2
 		new_image_3[bg_inds] = 1
 		new_image_4[bg_inds1] = 1
 		new_image_5[bg_inds2] = 1
 		new_image_6[bg_inds3] = 1
+
+		new_image_2[new_image_2 == 0] = 1
+		new_image_2[new_image_2 == 2] = 0
 
 
 

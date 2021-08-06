@@ -4,6 +4,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 import torchvision.transforms as transform
+import matplotlib.pyplot as plt
 
 from src.segmentation.utils.PreprocessUtils import PreprocessUtils
 
@@ -63,10 +64,19 @@ class ImageDataloader(Dataset):
         mask = mask[int(y):int(y+h), int(x):int(x+w)]
 
         img = img / 255.0
+        '''
+        print(img)
+        plt.imshow(img)
+        plt.show()
+        print(mask)
+        plt.imshow(mask)
+        plt.show()
+        '''
 
         img = np.moveaxis(img, -1, 0)
         mask = np.moveaxis(mask, -1, 0)
-        
+
+
         img = torch.from_numpy(img)
         mask = torch.from_numpy(mask)
             

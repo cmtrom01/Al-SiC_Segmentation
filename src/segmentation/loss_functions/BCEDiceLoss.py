@@ -56,7 +56,7 @@ class DiceLoss(nn.Module):
 class BCEDiceLoss(DiceLoss):
     __name__ = 'bce_dice_loss'
 
-    def __init__(self, eps=1e-7, activation='sigmoid', lambda_dice=0.0, lambda_bce=1.0):
+    def __init__(self, eps=1e-7, activation='sigmoid', lambda_dice=1.0, lambda_bce=1.0):
         super().__init__(eps, activation)
         if activation == None:
             self.bce = nn.BCELoss(reduction='mean')

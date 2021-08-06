@@ -1,6 +1,7 @@
 import os
 import torch
 from torch.utils.data import DataLoader
+from torch.optim import SGD, Adam, Adadelta, Adagrad, Adamax, ASGD, LBFGS, RMSprop, Rprop
 import numpy as np
 from tqdm.auto import tqdm as tq
 
@@ -9,6 +10,7 @@ from src.segmentation.loss_functions.BCEDiceLoss import BCEDiceLoss
 from src.segmentation.optimizers.RAdam import RAdam
 from src.segmentation.data_loader.ImageDataloader import ImageDataloader
 from src.segmentation.utils.TrainUtils import TrainUtils
+from src.segmentation.utils.Metrics import Metrics
 
 class ModelTrainer:
 
@@ -16,6 +18,7 @@ class ModelTrainer:
 		self.SMOOTH = 1e-6
 		self.train_on_gpu = True
 		self.train_utils = TrainUtils()
+		self.metrics = Metrics()
 
 	def init_model(self, train_on_gpu = True):
 		model = UNet(n_channels=3, n_classes=1).float()
@@ -33,6 +36,7 @@ class ModelTrainer:
 
 		num_workers = 2
 		bs = 8
+
 
 		train_dataset = ImageDataloader(
 			data_path = DATA_PATH,
@@ -58,7 +62,8 @@ class ModelTrainer:
 		valid_loss_min = np.Inf
 
 		criterion = BCEDiceLoss(eps=1.0, activation=None)
-		optimizer = RAdam(model.parameters(), lr = 0.005)
+		optimizer = RAdam(model.parameters(), lr = 0.05)
+		#optimizer = RMSprop(model.parameters(), lr=0.001, weight_decay=1e-8, momentum=0.9)
 		current_lr = [param_group['lr'] for param_group in optimizer.param_groups][0]
 		scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.2, patience=2, cooldown=2)
 		train_loader, valid_loader = self.init_train_loaders()
@@ -125,7 +130,7 @@ class ModelTrainer:
 		    # save model if validation loss has decreased
 			if valid_loss <= valid_loss_min:
 				print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(valid_loss_min, valid_loss))
-				torch.save(model.state_dict(), 'model_cifar.pt')
+				torch.save(model.state_dict(), 'model.pt')
 				valid_loss_min = valid_loss
 		    
 			scheduler.step(valid_loss)
