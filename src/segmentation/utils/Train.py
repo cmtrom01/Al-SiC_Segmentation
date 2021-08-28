@@ -12,7 +12,7 @@ from src.segmentation.data_loader.ImageDataloader import ImageDataloader
 from src.segmentation.utils.TrainUtils import TrainUtils
 from src.segmentation.utils.Metrics import Metrics
 
-class ModelTrainer:
+class SegmentationTrainer:
 
 	def __init__(self):
 		self.SMOOTH = 1e-6

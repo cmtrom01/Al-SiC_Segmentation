@@ -14,6 +14,7 @@ class VAELoss:
             learning_rate = 1e-3
             variational_beta = 1
             use_gpu = True
+            self.input_dim = 256*256
 	    # recon_x is the probability of a multivariate Bernoulli distribution p.
 	    # -log(p(x)) is then the pixel-wise binary cross-entropy.
 	    # Averaging or not averaging the binary cross-entropy over all pixels here
@@ -21,7 +22,7 @@ class VAELoss:
 	    # we need to pick for the other loss term by several orders of magnitude.
 	    # Not averaging is the direct implementation of the negative log likelihood,
 	    # but averaging makes the weight of the other loss term independent of the image resolution.
-            recon_loss = F.binary_cross_entropy(recon_x.view(-1, 784), x.view(-1, 784), reduction='sum')
+            recon_loss = F.binary_cross_entropy(recon_x.view(-1, self.input_dim), x.view(-1, self.input_dim), reduction='sum')
 	    
 	    # KL-divergence between the prior distribution over latent vectors
 	    # (the one we are going to sample from when generating new images)

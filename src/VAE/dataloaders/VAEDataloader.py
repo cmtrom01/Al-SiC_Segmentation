@@ -34,50 +34,8 @@ class VAEDataloader(Dataset):
 
         img, mask = cv2.imread(img_path), cv2.imread(mask_path)
 
-        
-        '''
-        print('-'*30)
-        print(mask)
-        print(np.unique(mask))
-        print('-'*30)
-        '''
-
-       
-
-        
-        '''
-        if self.preprocess_input:
-            # Normalizing the image with the given mean and
-            # std corresponding to each channel.
-            img = self.preprocess_input(image = img)['image']
-        '''
-        # PyTorch assumes images in channels-first format. 
-        # Hence, bringing the channel at the first place.
-        '''The second onehot way'''
-        # Palette
-        '''
-        palette = [[0], [1], [2], [3], [4], [5]]
-        
-        # Extend the last dimension for one-hot mapping
-        mask_onehot2 = np.expand_dims(mask, axis=2)# shape = (H, W) -> (H, W, 1) 
-        # one-hot encoding result
-        mask = mask_to_onehot(mask_onehot2, palette)  # shape = (H, W, K)
-        '''
-        
-        '''
-        if self.transforms:
-            # Applying augmentations if any. 
-            img, mask = self.transforms(img, mask)
-        '''
-        
-
-
-        #mask = bin_image.reshape((512, 256, 6)).transpose((2, 0, 1))
-        
-
         loadType = 1
 
-      
         c1 = [148, 236, 121]
         c2 = [255, 255, 255]#[79, 79, 47]
         c3 = [40, 53, 204]
@@ -87,24 +45,11 @@ class VAEDataloader(Dataset):
         
         tiffArr = np.array([])
 
-        
-
         temp_arr = np.array(mask)
        
         if loadType == 1:
             classes = (c1,c2,c3,c4,c5,c6)
             mask = self.preprocess_utils.RGB_to_Binary_OneHot(1, temp_arr, classes)
-       
-        
-
-        '''
-
-        print('-'*30)
-        print(mask)
-        print(np.unique(mask))
-        print('-'*30)
-        '''
-
         
         w = 256
         h = 256
@@ -117,29 +62,10 @@ class VAEDataloader(Dataset):
         img = img[int(y):int(y+h), int(x):int(x+w)]
         mask = mask[int(y):int(y+h), int(x):int(x+w)]
 
-        mask = cv2.resize(mask.reshape((256, 256)), (28, 28))
-        mask = mask.reshape((28, 28, 1))
-        '''
-        print('-'*30)
-        print(mask)
-        print(np.unique(mask))
-        print('-'*30)
-
-        print('-'*30)
-        print('-'*30)
-        print('-'*30)
-        print('-'*30)
-      
-        '''
+        #mask = cv2.resize(mask.reshape((256, 256)), (28, 28))
+        #mask = mask.reshape((28, 28, 1))
 
         img = img / 255.0
-
-        '''
-        img2 = np.zeros( ( np.array(img).shape[0], np.array(img).shape[1], 3 ) )
-        img2[:,:,0] = img # same value in each channel
-        img2[:,:,1] = img
-        img2[:,:,2] = img
-        '''
 
         img = np.moveaxis(img, -1, 0)
         mask = np.moveaxis(mask, -1, 0)

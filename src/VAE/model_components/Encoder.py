@@ -13,11 +13,15 @@ class Encoder(nn.Module):
         learning_rate = 1e-3
         variational_beta = 1
         use_gpu = True
+        input_width = 256
+        input_length = 256
+        dim_1 = int(input_width/4)
+        dim_2 = int(input_length/4)
 
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=c, kernel_size=4, stride=2, padding=1) # out: c x 14 x 14
-        self.conv2 = nn.Conv2d(in_channels=c, out_channels=c*2, kernel_size=4, stride=2, padding=1) # out: c x 7 x 7
-        self.fc_mu = nn.Linear(in_features=c*2*7*7, out_features=latent_dims)
-        self.fc_logvar = nn.Linear(in_features=c*2*7*7, out_features=latent_dims)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=c, kernel_size=4, stride=2, padding=1) # out: c x 14 128 x 14 128
+        self.conv2 = nn.Conv2d(in_channels=c, out_channels=c*2, kernel_size=4, stride=2, padding=1) # out: c x 7 64 x 7 64
+        self.fc_mu = nn.Linear(in_features=c*2*dim_1*dim_2, out_features=latent_dims)
+        self.fc_logvar = nn.Linear(in_features=c*2*dim_1*dim_2, out_features=latent_dims)
             
     def forward(self, x):
         x = F.relu(self.conv1(x))
