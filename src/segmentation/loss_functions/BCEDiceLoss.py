@@ -52,6 +52,15 @@ class DiceLoss(nn.Module):
                            eps=self.eps, threshold=None, 
                            activation=self.activation)
 
+from src.VAE.utils.Train import VAETrainer
+from src.VAE.model.VAE_model import VariationalAutoencoder
+from src.VAE.dataloaders.VAEDataloader import VAEDataloader
+
+def init_model(gpu = True):
+    vae = VariationalAutoencoder()
+    if gpu == True:
+        vae.cuda()
+    return vae
 
 class BCEDiceLoss(DiceLoss):
     __name__ = 'bce_dice_loss'
@@ -64,8 +73,16 @@ class BCEDiceLoss(DiceLoss):
             self.bce = nn.BCEWithLogitsLoss(reduction='mean')
         self.lambda_dice=lambda_dice
         self.lambda_bce=lambda_bce
+        self.lambda_vae=1.0
+        self.save_path = '/home/chris/Desktop/Al-SiC_Segmentation/models/BettiVAE'
+        self.gpu = True
+        self.vae = init_model(self.gpu)
+
+
+
 
     def forward(self, y_pr, y_gt):
         dice = super().forward(y_pr, y_gt)
         bce = self.bce(y_pr, y_gt)
-        return (self.lambda_dice*dice) + (self.lambda_bce* bce)
+        #vae = self.vae.forward(y_pr)
+        return (self.lambda_dice*dice) + (self.lambda_bce* bce) #+ (self.lambda_vae*torch.mean(vae[0]))

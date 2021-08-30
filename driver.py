@@ -17,8 +17,8 @@ def main():
     model_trainer = SegmentationTrainer()
     train_model = model_trainer.train()
     
-    #model_trainer = VAETrainer()
-    #train_model = model_trainer.train()
+    model_trainer = VAETrainer()
+    train_model = model_trainer.train()
 
 if __name__ == '__main__':
     main()

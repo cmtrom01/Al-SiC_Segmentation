@@ -20,6 +20,7 @@ class VAETrainer:
 		self.save_model = True
 		self.gpu = True
 		self.vaeloss = VAELoss()
+		self.save_path = '/home/chris/Desktop/Al-SiC_Segmentation/models/BettiVAE'
 
 	def init_model(self):
 		vae = VariationalAutoencoder()
@@ -90,5 +91,4 @@ class VAETrainer:
 			train_loss_avg[-1] /= num_batches
 			print('Epoch [%d / %d] average reconstruction error: %f' % (epoch+1, self.epochs, train_loss_avg[-1]))
 		if self.save_model == True:
-			SAVE_PATH = '/content/gdrive/My Drive/Al-SiC-Graphite/mod150'
-			torch.save(vae.state_dict(), SAVE_PATH)
+			torch.save(vae.state_dict(), self.save_path)
