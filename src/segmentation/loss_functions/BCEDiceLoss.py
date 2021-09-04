@@ -1,5 +1,8 @@
 import torch
 import torch.nn as nn
+from src.VAE.utils.Train import VAETrainer
+from src.VAE.model.VAE_model import VariationalAutoencoder
+from src.VAE.dataloaders.VAEDataloader import VAEDataloader
 
 def f_score(pr, gt, beta=1, eps=1e-7, threshold=None, activation='sigmoid'):
     """
@@ -51,10 +54,6 @@ class DiceLoss(nn.Module):
         return 1 - f_score(y_pr, y_gt, beta=1., 
                            eps=self.eps, threshold=None, 
                            activation=self.activation)
-
-from src.VAE.utils.Train import VAETrainer
-from src.VAE.model.VAE_model import VariationalAutoencoder
-from src.VAE.dataloaders.VAEDataloader import VAEDataloader
 
 def init_model(gpu = True):
     vae = VariationalAutoencoder()
