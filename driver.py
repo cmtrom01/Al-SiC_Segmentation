@@ -14,8 +14,8 @@ def set_all_seeds(seed):
     torch.backends.cudnn.deterministic = True
 
 def main():
-    model_trainer = SegmentationTrainer()
-    train_model = model_trainer.train()
+    #model_trainer = SegmentationTrainer()
+    #train_model = model_trainer.train()
     
     model_trainer = VAETrainer()
     train_model = model_trainer.train()
